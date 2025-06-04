@@ -12,7 +12,7 @@ import {convert} from "../controllers/convert.controller.js";
  *       properties:
  *         number:
  *           type: integer
- *           description: The number to convert to Roman numeral.
+ *           description: The number to convert to a Roman numeral.
  *           minimum: 1
  *           maximum: 3999
  *           example: 1994
@@ -66,7 +66,7 @@ class ApiRoutes {
          *                 value:
          *                   error: "Invalid input: 'number' must be a number."
          *               outOfRange:
-         *                 summary: Number out of range
+         *                 summary: Number out-of-range
          *                 value:
          *                   error: "Number out of range (1-3999)."
          */
