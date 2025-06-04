@@ -1,0 +1,16 @@
+#!/bin/sh
+
+REPO_HOST=us-west1-docker.pkg.dev
+PROJ_ID=roman-numerals-461903
+REPOSITORY=roman-numeral-repository
+IMAGE=roman-numerals-prod
+TAG=v1
+
+echo "Cleaning up..."
+docker image rm us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repository/roman-numerals-prod:v1
+echo "Building..."
+docker build --platform linux/amd64 -t roman-numerals-prod:v1 .
+echo "Tagging..."
+docker tag roman-numerals-prod us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repository/roman-numerals-prod:v1
+echo "Pushing..."
+docker push us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repository/roman-numerals-prod:v1
