@@ -1,14 +1,21 @@
 export default class RomanNumeralConverter {
     static convert(num: number): string {
-        const thousands = Math.floor(num / 1000);
+        const romanSymbols: [string, number][] = [
+            ['M', 1000], ['CM', 900], ['D', 500], ['CD', 400], ['C', 100],
+            ['XC', 90], ['L', 50], ['XL', 40], ['X', 10], ['IX', 9],
+            ['V', 5], ['IV', 4], ['I', 1]
+        ];
+        let result = '';
 
-        let numerator = thousands > 0 ? num % (thousands*1000) : num;
+        for (const [symbol, value] of romanSymbols) {
 
-        const hundreds = numerator / 100
+            while (num >= value) {
+                result += symbol;
+                num -= value;
+            }
+        }
 
-        const m = thousands > 3 ? 'CM' : 'M'.repeat(thousands);
-        const c = hundreds === 4 ? 'CD' : 'C'.repeat(hundreds)
+        return result;
 
-        return '' + m + c;
     }
 }
