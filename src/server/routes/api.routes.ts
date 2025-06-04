@@ -39,6 +39,7 @@ class ApiRoutes {
          * /convert:
          *   post:
          *     summary: Converts an integer to a Roman numeral.
+         *     description: This (POST) request will process the number and return the Roman numeral. It is an idempotent operation.
          *     tags: [Converter]
          *     requestBody:
          *       required: true
