@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import RomanNumeralConverter from "../roman-numeral-converter.js";
 
+/**
+ * Converts an integer to a Roman numeral by routing the request data to an internal converter.
+ * @param req
+ * @param res
+ */
 export function convert(req: Request, res: Response): Response {
     const {number} = req.body;
 
