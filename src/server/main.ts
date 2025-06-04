@@ -2,7 +2,7 @@ import express from "express";
 import ViteExpress from "vite-express";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = parseInt(process.env.PORT || '3000');
 
 app.get("/hello", (_, res) => {
   res.send("Hello Vite + React + TypeScript!");
