@@ -1,12 +1,13 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import ViteExpress from "vite-express";
+import Server from "./server.js";
 
 const app = express();
 const port = parseInt(process.env.PORT || '3000');
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-
+new Server(app);
 // Placeholder for the conversion logic
 function convert(numberToConvert: number): string {
   // TODO: Implement actual Roman numeral conversion logic
@@ -17,7 +18,7 @@ app.get("/hello", (_, res) => {
   res.send("Hello Vite + React + TypeScript!");
 });
 
-app.post("/convert", (req, res) => {
+app.post("/convert", (req: Request, res: Response) => {
   const { number } = req.body;
 
   if (typeof number !== 'number') {
@@ -35,4 +36,6 @@ app.post("/convert", (req, res) => {
 
 ViteExpress.listen(app, port, () =>
   console.log(`Server is listening on port ${port}...`),
-);
+).on("error", (err) => {
+  console.error("Server error:", err)
+});
