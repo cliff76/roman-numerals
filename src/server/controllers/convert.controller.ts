@@ -9,15 +9,18 @@ import RomanNumeralConverter from "../roman-numeral-converter.js";
 export function convert(req: Request, res: Response): Response {
     const {number} = req.body;
 
-    if (typeof number !== 'number') {
-        return res.status(400).json({error: "Invalid input: 'number' must be a number."});
+    try {
+        // The RomanNumeralConverter.convert method will validate if 'number' is an integer
+        // and if it's within the acceptable range (0-3999).
+        const romanNumeral = RomanNumeralConverter.convert(number);
+        return res.json({ converted: romanNumeral });
+    } catch (error) {
+        if (error instanceof Error) {
+            return res.status(400).json({ error: error.message, input: number });
+        }
+        // Fallback for non-Error objects thrown
+        return res.status(500).json({
+            error: `An unknown validation error occurred from the given input number ${number}.`, input: number
+        });
     }
-
-    if (number < 1 || number > 3999) {
-        return res.status(400).json({error: "Number out of range (1-3999)."});
-    }
-
-    const romanNumeral = RomanNumeralConverter.convert(number);
-    res.json({result: romanNumeral});
-    return res.json({ converted: romanNumeral });
 }
