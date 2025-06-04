@@ -33,4 +33,22 @@ describe('RomanNumeralConverter', () => {
         expect(RomanNumeralConverter.convert(11)).toEqual('XI');
         expect(RomanNumeralConverter.convert(3999)).toEqual('MMMCMXCIX');
     });
+
+    describe('RomanNumeralConverter error handling for invalid inputs', () => {
+        it('should throw an error for numbers less than 0', () => {
+            expect(() => RomanNumeralConverter.convert(-1)).toThrowError('Input number out of range (must be 0-3999).');
+            expect(() => RomanNumeralConverter.convert(-100)).toThrowError('Input number out of range (must be 0-3999).');
+        });
+
+        it('should throw an error for numbers greater than 3999', () => {
+            expect(() => RomanNumeralConverter.convert(4000)).toThrowError('Input number out of range (must be 0-3999).');
+            expect(() => RomanNumeralConverter.convert(10000)).toThrowError('Input number out of range (must be 0-3999).');
+        });
+
+        it('should throw an error for fractional numbers', () => {
+            expect(() => RomanNumeralConverter.convert(3.14)).toThrowError('Input must be an integer.');
+            expect(() => RomanNumeralConverter.convert(0.5)).toThrowError('Input must be an integer.');
+            expect(() => RomanNumeralConverter.convert(199.99)).toThrowError('Input must be an integer.');
+        });
+    });
 });
