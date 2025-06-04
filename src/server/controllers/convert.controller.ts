@@ -16,9 +16,11 @@ export function convert(req: Request, res: Response): Response {
         return res.json({ converted: romanNumeral });
     } catch (error) {
         if (error instanceof Error) {
-            return res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message, input: number });
         }
         // Fallback for non-Error objects thrown
-        return res.status(400).json({ error: "An unknown validation error occurred." });
+        return res.status(500).json({
+            error: `An unknown validation error occurred from the given input number ${number}.`, input: number
+        });
     }
 }
