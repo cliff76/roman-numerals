@@ -2,7 +2,7 @@ FROM node:22-alpine
 LABEL authors="cliftoncraig"
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=80
 
 WORKDIR /app
 
@@ -14,4 +14,5 @@ RUN npm install --production=false
 COPY . .
 RUN npm run build
 
+EXPOSE 80
 ENTRYPOINT ["npm", "run", "start"]

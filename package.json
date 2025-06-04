@@ -9,10 +9,10 @@
     "build": "vite build",
     "test": "vitest",
     "docker-build:dev": "docker build -t roman-numerals-dev:latest .",
-    "docker-run:dev": "docker run -it -p 3000:3000 --name roman-numerals-dev roman-numerals-dev:latest",
+    "docker-run:dev": "docker run -it -p 80:80 --name roman-numerals-dev roman-numerals-dev:latest",
     "docker-build:prod": "docker build -t roman-numerals-prod:latest .",
     "docker-build:prod-linux": "docker build --platform linux/amd64 -t roman-numerals-prod:latest .",
-    "docker-run:prod": "docker run -it -p 3000:3000 --name roman-numerals-prod roman-numerals-prod:latest"
+    "docker-run:prod": "docker run -it -p 80:80 --name roman-numerals-prod roman-numerals-prod:latest"
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.42.0",
