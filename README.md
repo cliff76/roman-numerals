@@ -14,8 +14,6 @@ of a value.
 
 The following video demonstrates the Roman numeral converter in action. This application is currently deployed on Google Cloud Services, providing a scalable and reliable hosting environment for both the React frontend and Node.js backend API.
 
-![Demo](demo.gif)
-
 <a href="https://youtu.be/TwzMMMzA2iY">
     <img src="demo.gif" alt="Watch the demo" />
 </a>
