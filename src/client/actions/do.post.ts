@@ -1,5 +1,5 @@
-export async function doPost(value: string) {
-    return new Promise((resolve, reject) => {
+export async function doPost(_:string) {
+    return new Promise((resolve, _) => {
         setTimeout(resolve, 5000)
     })
 }

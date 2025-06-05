@@ -28,6 +28,7 @@ const mocks = vi.hoisted(() => {
             {description && <div>{description}</div>}
           </div>
       )),
+      Text: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>),
       View: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>)
     }
   };
@@ -209,5 +210,17 @@ describe('ToRomanConverter behaviors', () => {
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
     expect(screen.getByText('loading')).toBeInTheDocument();
+  });
+
+  it('shows error status when query fails', () => {
+    const errorMessage = 'Unknown error';
+    (ReactQuery.useMutation as Mock).mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      isError: true,
+      error: new Error(errorMessage),
+    } as any)
+    renderComponent();
+    expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
 });

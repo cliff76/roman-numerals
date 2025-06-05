@@ -15,8 +15,8 @@ export default function ToRomanConverter() {
     // Define the mutation for sending the text
     const sendNumberMutation = useMutation({
         mutationFn: doPost,
-        onSuccess: (data) => {},
-        onError: (error) => {}
+        onSuccess: (_) => {},
+        onError: (_) => {}
     });
 
     const handleClick = () => {
@@ -45,6 +45,12 @@ export default function ToRomanConverter() {
                 <Button onPress={handleClick} variant="primary" isDisabled={sendNumberMutation.isPending}>
                     {sendNumberMutation.isPending ? t('loading') : t('converter.buttonConvert')}
                 </Button>
+                {
+                    sendNumberMutation.isError &&
+                    <Text>
+                        {sendNumberMutation?.error?.message}
+                    </Text>
+                }
             </Flex>
         </View>
     );
