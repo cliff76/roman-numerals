@@ -8,6 +8,8 @@
     "start": "NODE_ENV=production tsx src/server/main.ts",
     "build": "vite build",
     "test": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "docker-build:dev": "docker build -t roman-numerals-dev:latest .",
     "docker-run:dev": "docker run -it -p 80:80 --name roman-numerals-dev roman-numerals-dev:latest",
     "docker-build:prod": "docker build -t roman-numerals-prod:latest .",
@@ -32,6 +34,7 @@
     "vite-express": "*"
   },
   "devDependencies": {
+    "@playwright/test": "^1.46.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",

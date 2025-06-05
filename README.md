@@ -22,7 +22,7 @@ Building the converter was a fun experience. I began implementing the Roman Nume
 conversion algorithm using a Test Driven Development approach. As I made a couple of passes and false starts,
 the pattern became obvious. My approach was to walk through a list of Roman numeral symbols mapped to their 
 respective values, from highest to smallest. I decrement these values from the input number as I walk through the list.
-Eg. 3,943 breaks down to `MMMCMXLIII` as follows:
+Eg. 3943 breaks down to `MMMCMXLIII` as follows:
 
 {
     M: '1000',
