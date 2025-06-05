@@ -7,6 +7,23 @@ import {useMutation} from "@tanstack/react-query";
 export default function ToRomanConverter() {
     const { t } = useTranslation();
     const [value, setValue] = useState('');
+    const [error, setError] = useState<string|null>(null);
+    function validateInput(value: string) {
+        if (value.length === 0)
+            return null;
+        const errorMessage = t('error.inputNotInteger');
+        try {
+            const result = parseInt(value, 10);
+            if (Number.isNaN(result)) {
+                setError(errorMessage);
+                return errorMessage
+            }
+        } catch (e) {
+            setError(errorMessage);
+            return errorMessage
+        }
+        setError(null);
+    }
 
     const handleInputChange = (value: string) => {
         setValue(value);
@@ -16,12 +33,18 @@ export default function ToRomanConverter() {
     const sendNumberMutation = useMutation({
         mutationFn: doPost,
         onSuccess: (_) => {},
-        onError: (_) => {}
+        onError: (error) => {
+            console.log('Error caught!', error);
+        }
     });
 
     const handleClick = () => {
         sendNumberMutation.mutate(value)
     };
+
+    function disableConvert() {
+        return value.length < 1 || error != null || sendNumberMutation.isPending;
+    }
 
     return (
         <View
@@ -35,6 +58,7 @@ export default function ToRomanConverter() {
                 <title>{t('converter.title')}</title>
                 <Heading level={4}>{t('converter.title')}</Heading>
                 <TextField
+                    validate={validateInput}
                     marginBottom="size-150"
                     label={t('converter.labelEnterNumber')}
                     type="text"
@@ -42,7 +66,7 @@ export default function ToRomanConverter() {
                     value={value}
                     onChange={handleInputChange}
                 />
-                <Button onPress={handleClick} variant="primary" isDisabled={sendNumberMutation.isPending}>
+                <Button onPress={handleClick} variant="primary" isDisabled={disableConvert()}>
                     {sendNumberMutation.isPending ? t('loading') : t('converter.buttonConvert')}
                 </Button>
                 {

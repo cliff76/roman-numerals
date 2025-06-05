@@ -139,16 +139,16 @@ describe('ToRomanConverter', () => {
     const button = screen.getByRole('button', { name: 'Convert' });
     
     expect(input).toHaveAttribute('type', 'text');
-    expect(button).not.toBeDisabled();
+    expect(button).toBeDisabled(); // Button is disabled when input is empty
   });
 
-  it('button is enabled by default', () => {
+  it('button is disabled by default when input is empty', () => {
     renderComponent();
     
     const button = screen.getByRole('button', { name: 'Convert' });
     
-    // Button should be enabled even with empty input based on current implementation
-    expect(button).not.toBeDisabled();
+    // Button should be disabled when input is empty
+    expect(button).toBeDisabled();
   });
 
   it('maintains state across multiple input changes', () => {
