@@ -18,6 +18,15 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json', // Path to translation files
     },
+    detection: {
+      // Order and from where user language should be detected
+      order: ['querystring', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      // Keys or params to lookup language from
+      lookupQuerystring: 'lng',
+      lookupLocalStorage: 'i18nextLng',
+      // Caches detected language in localStorage
+      caches: ['localStorage']
+    }
   });
 
 export default i18n;
