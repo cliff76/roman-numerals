@@ -51,6 +51,12 @@ export default function ToRomanConverter() {
                         {sendNumberMutation?.error?.message}
                     </Text>
                 }
+                {
+                    sendNumberMutation.isSuccess &&
+                    <Text data-testid="converted-number">
+                        {sendNumberMutation?.data?.converted}
+                    </Text>
+                }
             </Flex>
         </View>
     );

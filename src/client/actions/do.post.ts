@@ -1,5 +1,9 @@
-export async function doPost(_:string) {
-    return new Promise((resolve, _) => {
-        setTimeout(resolve, 5000)
-    })
+import axios from 'axios';
+
+export async function doPost(number: string) {
+    const response = await axios.post('/api/convert', {
+        number: parseInt(number, 10)
+    });
+
+    return response.data;
 }
