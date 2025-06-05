@@ -1,11 +1,11 @@
 export default class RomanNumeralConverter {
     static convert(num: number): string {
         if (!Number.isInteger(num)) {
-            throw new Error('Input must be an integer.');
+            throw new Error('error.inputNotInteger');
         }
 
         if (num < 0 || num > 3999) {
-            throw new Error('Input number out of range (must be 0-3999).');
+            throw new Error('error.inputOutOfRange');
         }
 
         const romanSymbols: [string, number][] = [

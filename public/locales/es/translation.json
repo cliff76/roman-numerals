@@ -1,0 +1,15 @@
+{
+  "converter": {
+    "title": "Convertidor de Números Romanos",
+    "labelEnterNumber": "Ingrese un número",
+    "descriptionRange": "1-3999",
+    "buttonConvert": "Convertir"
+  },
+  "error": {
+    "inputNotInteger": "La entrada debe ser un número entero.",
+    "inputOutOfRange": "Número de entrada fuera de rango (debe ser 0-3999).",
+    "unknownValidationError": "Ocurrió un error de validación desconocido con el número de entrada {{number}}.",
+    "unknownServerError": "Ocurrió un error inesperado en el servidor."
+  },
+  "loading": "Cargando..."
+}

@@ -1,0 +1,15 @@
+{
+  "converter": {
+    "title": "Roman Numeral Converter",
+    "labelEnterNumber": "Enter a number",
+    "descriptionRange": "1-3999",
+    "buttonConvert": "Convert"
+  },
+  "error": {
+    "inputNotInteger": "Input must be an integer.",
+    "inputOutOfRange": "Input number out of range (must be 0-3999).",
+    "unknownValidationError": "An unknown validation error occurred from the given input number {{number}}.",
+    "unknownServerError": "An unexpected error occurred on the server."
+  },
+  "loading": "Loading..."
+}
