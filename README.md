@@ -12,10 +12,37 @@ Try the [deployed version](https://roman-numerals-prod-723628240383.europe-west1
 (Disclaimer: The instance on Google Cloud is on a free tier and is subject to occasional shutdowns with 10+ minute long cold starts. If the link errors out please check back after about 10 minutes.)
 
 ## Features
-The UI respects both light and dark mode. This has been tested with Chrome DevTools. Also, the app is entirely
-localized. Appending a `?lng=es` query string will [switch to Spanish](https://roman-numerals-prod-723628240383.europe-west1.run.app?lng=es).
+The UI respects both light and dark mode. This has been tested with Chrome DevTools as illustrated in [PR #11](https://github.com/cliff76/roman-numerals/pull/11). Also, the app is entirely
+localized. Appending a `?lng=es` query string will [switch to Spanish](https://roman-numerals-prod-723628240383.europe-west1.run.app?lng=es). 
+The REST API doc is covered by Swagger which is accessed by appending `api-docs` to the base URL. 
+This can be explored in the [running app here](https://roman-numerals-prod-723628240383.europe-west1.run.app/api-docs/).
+
+## The Algorithm
+Building the converter was a fun experience. I began implementing the Roman Numeral 
+conversion algorithm using a Test Driven Development approach. As I made a couple of passes and false starts,
+the pattern became obvious. My approach was to walk through a list of Roman numeral symbols mapped to their 
+respective values, from highest to smallest. I decrement these values from the input number as I walk through the list.
+Eg. 3,943 breaks down to `MMMCMXLIII` as follows:
+
+{
+    M: '1000',
+    CM: '900',
+    XL: '40',
+    I: '1'
+}
+
+* 3943 - 1000 = 2943 -> 'M'
+* 2943 - 1000 = 1943 -> 'MM'
+* 1943 - 1000 = 943  -> 'MMM'
+* 943  - 900  = 43   -> 'MMMCM'
+* 43   - 40   = 43   -> 'MMMCMXL'
+* 3    - 1    = 2   -> 'MMMCMXLI'
+* 2    - 1    = 1   -> 'MMMCMXLII'
+* 1    - 1    = 0   -> 'MMMCMXLIII'
 
 ## Details
+This project is implemented as a React+Express app using a Vite template. While NextJS would have been preferred, 
+the decision was made to build a CSR React App after confirming with the recruiter.  
 The REST request is handled as
 a POST rather than a GET because it concerns the processing
 and transformation of the input, rather than retrieval
