@@ -23,7 +23,11 @@
     "swagger-ui-express": "^5.0.1",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
-    "vite-express": "*"
+    "vite-express": "*",
+    "i18next": "^23.12.2",
+    "react-i18next": "^15.0.0",
+    "i18next-http-backend": "^2.5.2",
+    "i18next-browser-languagedetector": "^8.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
