@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Flex, Heading, TextField, View} from "@adobe/react-spectrum";
+import {Button, Flex, Heading, Text, TextField, View} from "@adobe/react-spectrum";
 import { useTranslation } from 'react-i18next';
 import {doPost} from "../actions/do.post";
 import {useMutation} from "@tanstack/react-query";
@@ -42,7 +42,9 @@ export default function ToRomanConverter() {
                     value={value}
                     onChange={handleInputChange}
                 />
-                <Button onPress={handleClick} variant="primary">{t('converter.buttonConvert')}</Button>
+                <Button onPress={handleClick} variant="primary" isDisabled={sendNumberMutation.isPending}>
+                    {sendNumberMutation.isPending ? t('loading') : t('converter.buttonConvert')}
+                </Button>
             </Flex>
         </View>
     );

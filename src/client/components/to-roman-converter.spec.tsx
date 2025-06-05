@@ -11,8 +11,8 @@ vi.mock('@tanstack/react-query')
 const mocks = vi.hoisted(() => {
   return {
     reactSpectrum: {
-      Button: vi.fn(({ children, onPress, ...props }: any) => (
-          <button onClick={onPress} {...props}>{children}</button>
+      Button: vi.fn(({ children, onPress, isDisabled, ...props }: any) => (
+          <button onClick={onPress} disabled={isDisabled} {...props}>{children}</button>
       )),
       Flex: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>),
       Heading: vi.fn(({ children, ...props }: any) => <h4 {...props}>{children}</h4>),
@@ -197,5 +197,17 @@ describe('ToRomanConverter behaviors', () => {
     const button = screen.getByRole('button', { name: 'Convert' });
     fireEvent.click(button);
     expect(mutateMock).toHaveBeenCalledWith('12');
+  });
+
+  it('shows pending status while query executes', () => {
+    (ReactQuery.useMutation as Mock).mockReturnValue({
+      mutate: mutateMock,
+      isPending: true,
+      isError: false,
+    } as any)
+    renderComponent();
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(screen.getByText('loading')).toBeInTheDocument();
   });
 });
