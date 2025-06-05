@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Button, Flex, Heading, TextField, View} from "@adobe/react-spectrum";
 import { useTranslation } from 'react-i18next';
 import {doPost} from "../actions/do.post";
+import {useMutation} from "@tanstack/react-query";
 
 export default function ToRomanConverter() {
     const { t } = useTranslation();
@@ -11,8 +12,15 @@ export default function ToRomanConverter() {
         setValue(value);
     };
 
+    // Define the mutation for sending the text
+    const sendNumberMutation = useMutation({
+        mutationFn: doPost,
+        onSuccess: (data) => {},
+        onError: (error) => {}
+    });
+
     const handleClick = () => {
-        doPost(value)
+        sendNumberMutation.mutate(value)
     };
 
     return (

@@ -1,1 +1,1 @@
-export function doPost(value: string) {}
+export async function doPost(value: string) {}

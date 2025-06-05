@@ -3,6 +3,9 @@ import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import {beforeEach, describe, expect, it, Mock, vi} from 'vitest';
 import ToRomanConverter from './to-roman-converter';
 import {doPost} from "../actions/do.post";
+import * as ReactQuery from '@tanstack/react-query';
+
+vi.mock('@tanstack/react-query')
 
 // Mock Adobe React Spectrum components
 const mocks = vi.hoisted(() => {
@@ -52,10 +55,16 @@ vi.mock('../actions/do.post');
 const renderComponent = () => {
   return render(<ToRomanConverter />);
 };
+const mutateMock = vi.fn();
 
 describe('ToRomanConverter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(ReactQuery, 'useMutation').mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      isError: false,
+    } as any);
   });
 
   it('renders the component with all elements', () => {
@@ -155,8 +164,31 @@ describe('ToRomanConverter', () => {
     fireEvent.change(input, { target: { value: '123' } });
     expect(input.value).toBe('123');
   });
+});
 
-  it('handles button clicks', async () => {
+describe('ToRomanConverter behaviors', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Mock useMutation
+    vi.spyOn(ReactQuery, 'useMutation').mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      isError: false,
+    } as any);
+  });
+
+  it('configures a mutation call for the backend API', ()=> {
+    renderComponent();
+
+    expect(ReactQuery.useMutation).toHaveBeenCalledWith(expect.objectContaining({
+      mutationFn: doPost,
+      onSuccess: expect.any(Function),
+      onError: expect.any(Function)
+    }));
+
+  });
+
+  it('fires API request when the button is clicked', async () => {
     renderComponent();
     const input = screen.getByLabelText('Enter a number') as HTMLInputElement;
     fireEvent.change(input, { target: { value: '12' } });
@@ -164,6 +196,6 @@ describe('ToRomanConverter', () => {
 
     const button = screen.getByRole('button', { name: 'Convert' });
     fireEvent.click(button);
-    expect(doPost).toHaveBeenCalledWith('12');
+    expect(mutateMock).toHaveBeenCalledWith('12');
   });
 });
