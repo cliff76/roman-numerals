@@ -103,11 +103,11 @@ describe('Convert Controller', () => {
         expect(RomanNumeralConverter.convert).toHaveBeenCalledWith(5);
         expect(mockResponse.status).toHaveBeenCalledWith(500);
         expect(mockResponse.json).toHaveBeenCalledWith({
-            error: `An unknown validation error occurred from the given input number 5.`, input: 5
+            error: "error.unknownServerError", input: 5
         });
         expect(responseStatus).toBe(500);
         expect(responseJson).toEqual({
-            error: `An unknown validation error occurred from the given input number 5.`, input: 5
+            error: "error.unknownServerError", input: 5
         });
     });
 });
