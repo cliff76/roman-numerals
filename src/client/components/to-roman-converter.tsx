@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Flex, Heading, TextField, View} from "@adobe/react-spectrum";
 import { useTranslation } from 'react-i18next';
+import {doPost} from "../actions/do.post";
 
 export default function ToRomanConverter() {
     const { t } = useTranslation();
@@ -11,9 +12,7 @@ export default function ToRomanConverter() {
     };
 
     const handleClick = () => {
-        if (value) {
-            // navigate(`?number=${value}`);
-        }
+        doPost(value)
     };
 
     return (

@@ -1,8 +1,36 @@
 import React from 'react';
-import {fireEvent, render, screen} from '@testing-library/react';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {beforeEach, describe, expect, it, Mock, vi} from 'vitest';
 import ToRomanConverter from './to-roman-converter';
-import "../mocks/mock-react.spectrum";
+import {doPost} from "../actions/do.post";
+
+// Mock Adobe React Spectrum components
+const mocks = vi.hoisted(() => {
+  return {
+    reactSpectrum: {
+      Button: vi.fn(({ children, onPress, ...props }: any) => (
+          <button onClick={onPress} {...props}>{children}</button>
+      )),
+      Flex: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>),
+      Heading: vi.fn(({ children, ...props }: any) => <h4 {...props}>{children}</h4>),
+      TextField: vi.fn(({ label, value, onChange, description, ...props }: any) => (
+          <div>
+            <label htmlFor="test-input">{label}</label>
+            <input
+                id="test-input"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                {...props}
+            />
+            {description && <div>{description}</div>}
+          </div>
+      )),
+      View: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>)
+    }
+  };
+})
+
+vi.mock('@adobe/react-spectrum', () => mocks.reactSpectrum);
 
 // Mock the useTranslation hook for testing
 vi.mock('react-i18next', () => ({
@@ -18,6 +46,8 @@ vi.mock('react-i18next', () => ({
     }
   })
 }));
+
+vi.mock('../actions/do.post');
 
 const renderComponent = () => {
   return render(<ToRomanConverter />);
@@ -124,5 +154,16 @@ describe('ToRomanConverter', () => {
     
     fireEvent.change(input, { target: { value: '123' } });
     expect(input.value).toBe('123');
+  });
+
+  it('handles button clicks', async () => {
+    renderComponent();
+    const input = screen.getByLabelText('Enter a number') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '12' } });
+    await waitFor(() => expect(input.value).toBe('12'));
+
+    const button = screen.getByRole('button', { name: 'Convert' });
+    fireEvent.click(button);
+    expect(doPost).toHaveBeenCalledWith('12');
   });
 });
