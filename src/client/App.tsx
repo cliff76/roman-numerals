@@ -1,37 +1,28 @@
 import "./App.css";
-
-import { useState } from "react";
-
-import reactLogo from "./assets/react.svg";
-import {Button, View} from "@adobe/react-spectrum";
+import ToRomanConverter from "./components/to-roman-converter";
+import {useEffect, useState} from "react";
+import {defaultTheme, Provider} from "@adobe/react-spectrum";
 
 function App() {
-  const [count, setCount] = useState(0);
+    const [colorScheme, setColorScheme] = useState<'light' | 'dark'>(() => {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    });
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button variant="primary" onPress={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  );
-}
+    useEffect(() => {
+        // Listen for changes in system preference
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = (e: MediaQueryListEvent) => {
+            setColorScheme(e.matches ? 'dark' : 'light');
+        };
+
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+    }, []);
+
+    return (
+        <Provider theme={defaultTheme} colorScheme={colorScheme}>
+            <ToRomanConverter/>
+        </Provider>
+    );}
 
 export default App;
