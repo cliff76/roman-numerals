@@ -218,7 +218,7 @@ describe('ToRomanConverter behaviors', () => {
       mutate: mutateMock,
       isPending: false,
       isError: true,
-      error: new Error(errorMessage),
+      error: {response: {data: {error: errorMessage}}},
     } as any)
     renderComponent();
     expect(screen.getByText(errorMessage)).toBeInTheDocument();
