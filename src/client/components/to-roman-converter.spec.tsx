@@ -1,8 +1,40 @@
 import React from 'react';
-import {fireEvent, render, screen} from '@testing-library/react';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {beforeEach, describe, expect, it, Mock, vi} from 'vitest';
 import ToRomanConverter from './to-roman-converter';
-import "../mocks/mock-react.spectrum";
+import {doPost} from "../actions/do.post";
+import * as ReactQuery from '@tanstack/react-query';
+
+vi.mock('@tanstack/react-query')
+
+// Mock Adobe React Spectrum components
+const mocks = vi.hoisted(() => {
+  return {
+    reactSpectrum: {
+      Button: vi.fn(({ children, onPress, isDisabled, ...props }: any) => (
+          <button onClick={onPress} disabled={isDisabled} {...props}>{children}</button>
+      )),
+      Flex: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>),
+      Heading: vi.fn(({ children, ...props }: any) => <h4 {...props}>{children}</h4>),
+      TextField: vi.fn(({ label, value, onChange, description, ...props }: any) => (
+          <div>
+            <label htmlFor="test-input">{label}</label>
+            <input
+                id="test-input"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                {...props}
+            />
+            {description && <div>{description}</div>}
+          </div>
+      )),
+      Text: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>),
+      View: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>)
+    }
+  };
+})
+
+vi.mock('@adobe/react-spectrum', () => mocks.reactSpectrum);
 
 // Mock the useTranslation hook for testing
 vi.mock('react-i18next', () => ({
@@ -19,13 +51,21 @@ vi.mock('react-i18next', () => ({
   })
 }));
 
+vi.mock('../actions/do.post');
+
 const renderComponent = () => {
   return render(<ToRomanConverter />);
 };
+const mutateMock = vi.fn();
 
 describe('ToRomanConverter', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(ReactQuery, 'useMutation').mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      isError: false,
+    } as any);
   });
 
   it('renders the component with all elements', () => {
@@ -124,5 +164,63 @@ describe('ToRomanConverter', () => {
     
     fireEvent.change(input, { target: { value: '123' } });
     expect(input.value).toBe('123');
+  });
+});
+
+describe('ToRomanConverter behaviors', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Mock useMutation
+    vi.spyOn(ReactQuery, 'useMutation').mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      isError: false,
+    } as any);
+  });
+
+  it('configures a mutation call for the backend API', ()=> {
+    renderComponent();
+
+    expect(ReactQuery.useMutation).toHaveBeenCalledWith(expect.objectContaining({
+      mutationFn: doPost,
+      onSuccess: expect.any(Function),
+      onError: expect.any(Function)
+    }));
+
+  });
+
+  it('fires API request when the button is clicked', async () => {
+    renderComponent();
+    const input = screen.getByLabelText('Enter a number') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '12' } });
+    await waitFor(() => expect(input.value).toBe('12'));
+
+    const button = screen.getByRole('button', { name: 'Convert' });
+    fireEvent.click(button);
+    expect(mutateMock).toHaveBeenCalledWith('12');
+  });
+
+  it('shows pending status while query executes', () => {
+    (ReactQuery.useMutation as Mock).mockReturnValue({
+      mutate: mutateMock,
+      isPending: true,
+      isError: false,
+    } as any)
+    renderComponent();
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(screen.getByText('loading')).toBeInTheDocument();
+  });
+
+  it('shows error status when query fails', () => {
+    const errorMessage = 'Unknown error';
+    (ReactQuery.useMutation as Mock).mockReturnValue({
+      mutate: mutateMock,
+      isPending: false,
+      isError: true,
+      error: new Error(errorMessage),
+    } as any)
+    renderComponent();
+    expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
 });

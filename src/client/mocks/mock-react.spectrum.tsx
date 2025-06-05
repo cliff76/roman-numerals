@@ -4,12 +4,12 @@ import React from "react";
 
 // Mock Adobe React Spectrum components
 vi.mock('@adobe/react-spectrum', () => ({
-    Button: ({ children, onPress, ...props }: any) => (
+    Button: vi.fn(({ children, onPress, ...props }: any) => (
         <button onClick={onPress} {...props}>{children}</button>
-    ),
-    Flex: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    Heading: ({ children, ...props }: any) => <h4 {...props}>{children}</h4>,
-    TextField: ({ label, value, onChange, description, ...props }: any) => (
+    )),
+    Flex: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>),
+    Heading: vi.fn(({ children, ...props }: any) => <h4 {...props}>{children}</h4>),
+    TextField: vi.fn(({ label, value, onChange, description, ...props }: any) => (
         <div>
             <label htmlFor="test-input">{label}</label>
             <input
@@ -20,6 +20,6 @@ vi.mock('@adobe/react-spectrum', () => ({
             />
             {description && <div>{description}</div>}
         </div>
-    ),
-    View: ({ children, ...props }: any) => <div {...props}>{children}</div>
+    )),
+    View: vi.fn(({ children, ...props }: any) => <div {...props}>{children}</div>)
 }));
