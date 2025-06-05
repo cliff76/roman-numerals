@@ -223,4 +223,18 @@ describe('ToRomanConverter behaviors', () => {
     renderComponent();
     expect(screen.getByText(errorMessage)).toBeInTheDocument();
   });
+
+  it('shows result when query succeeds', () => {
+    (ReactQuery.useMutation as Mock).mockReturnValue({
+      mutate: mutateMock,
+      isSuccess: true,
+      isPending: false,
+      isError: false,
+      data: {converted: 'CXII'},
+    } as any)
+    renderComponent();
+    const convertedResult = screen.getByTestId('converted-number');
+    expect(convertedResult).toBeInTheDocument();
+    expect(convertedResult.innerHTML).toEqual('CXII');
+  });
 });
