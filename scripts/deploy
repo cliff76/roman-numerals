@@ -11,6 +11,6 @@ docker image rm us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repo
 echo "Building..."
 docker build --platform linux/amd64 -t roman-numerals-prod:v1 .
 echo "Tagging..."
-docker tag roman-numerals-prod us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repository/roman-numerals-prod:v1
+docker tag roman-numerals-prod:v1 us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repository/roman-numerals-prod:v1
 echo "Pushing..."
 docker push us-west1-docker.pkg.dev/roman-numerals-461903/roman-numeral-repository/roman-numerals-prod:v1
