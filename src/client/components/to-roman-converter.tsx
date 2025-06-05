@@ -33,9 +33,7 @@ export default function ToRomanConverter() {
     const sendNumberMutation = useMutation({
         mutationFn: doPost,
         onSuccess: (_) => {},
-        onError: (error) => {
-            console.log('Error caught!', error);
-        }
+        onError: (error) => {}
     });
 
     const handleClick = () => {
@@ -72,7 +70,7 @@ export default function ToRomanConverter() {
                 {
                     sendNumberMutation.isError &&
                     <Text>
-                        {sendNumberMutation?.error?.message}
+                        {t(sendNumberMutation?.error?.response?.data?.error)}
                     </Text>
                 }
                 {
